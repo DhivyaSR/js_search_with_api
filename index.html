@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h2>API</h2>
+    <input type="text" name="input_box" id="input_box">
+    <!-- <button id="searchBtn">Search</button> -->
+    <br>
+    <h2>List JSON Data</h2>
+    <table id="listData" border="1" cellpadding="3" cellspacing="3" width="100%">
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Body</th>
+            </tr>
+        </thead>
+        <tbody id="tbl_body">
+
+        </tbody>
+    </table>
+    <script>
+        var input_box = document.getElementById('input_box');
+        /* var searchBtn = document.getElementById('searchBtn'); */
+        var tbl_body = document.getElementById('tbl_body');
+        FetchData();
+        input_box.addEventListener("keyup",function(){
+            fetch("https://jsonplaceholder.typicode.com/posts")
+            .then((res)=>res.json())
+            .then((data)=>{
+                tbl_body.innerHTML = "";
+                data.forEach(element => {
+                    var title = element.title;
+                    input = input_box.value;
+                    if(title.includes(input)){
+                        console.log(element.title);
+                        var tr_element = document.createElement('tr');
+
+                        var td_body = document.createElement('td');
+                        td_body.textContent = element.body;
+
+                        var td_title = document.createElement('td');
+                        td_title.textContent = element.title;
+
+                        tr_element.appendChild(td_title);
+                        tr_element.appendChild(td_body);
+
+                        tbl_body.appendChild(tr_element);
+                    }
+                });
+            })
+            .catch(error => console.error(error));
+            
+        });
+        function FetchData(){
+            fetch("https://jsonplaceholder.typicode.com/posts")
+            .then((res)=>res.json())
+            .then((data)=>{
+                var matchElement = [];
+                
+                data.forEach(element => {
+                    var tr_element = document.createElement('tr'); //Create Table Row
+                    var td_body = document.createElement('td'); //Create Table data body
+                    td_body.textContent = element.body; // append text
+                    var td_title = document.createElement('td'); //Create Table data title
+                    td_title.textContent = element.title; // append text
+                    tr_element.appendChild(td_title); // append second td in tr
+                    tr_element.appendChild(td_body); // append first td in tr
+                    tbl_body.appendChild(tr_element); // append table row
+                });
+            })
+            .catch(error => console.error(error));
+        }
+            
+
+    </script>
+</body>
+</html>
